@@ -9,6 +9,9 @@ class CustomersController < ApplicationController
   include SortHelper
 
   def index
+    # hash = {"set_filter"=>"1", "f"=>[ "cf_1"], "op"=>{"cf_1"=>"="}, "v"=>{"cf_1"=>["Customers"]}, "group_by"=>"" }
+    #
+    # params.reverse_merge!(hash)
     @query = UserQuery.build_from_params(params, :name => '_')
 
     sort_init(@query.sort_criteria.empty? ? [['id', 'desc']] : @query.sort_criteria)

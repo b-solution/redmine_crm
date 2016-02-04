@@ -8,6 +8,12 @@ Redmine::Plugin.register :redmine_crm do
 
   menu :top_menu, :customers,
        {:controller => 'customers', :action => 'index'},
-       :caption => :label_customers_plural,
+       :caption => :label_customer_plural,
        :if => Proc.new{ User.current.admin?}
+  end
+
+Rails.application.config.to_prepare do
+  User.send(:include, RedmineCrm::UserPatch)
 end
+
+

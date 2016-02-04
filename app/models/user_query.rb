@@ -29,6 +29,7 @@ class UserQuery < Query
   def available_columns
     return @available_columns if @available_columns
     @available_columns = self.class.available_columns.dup
+    @available_columns += CustomField.where(:type => 'UserCustomField').all.map {|cf| QueryCustomFieldColumn.new(cf) }
     @available_columns
   end
 
@@ -39,8 +40,7 @@ class UserQuery < Query
   def results_scope(options={})
     order_option = [group_by_sort_order, options[:order]].flatten.reject(&:blank?)
 
-    User.
-        where(statement).
+    User.where(statement).includes(:custom_values).where("custom_values.value = 'Customers'").
         order(order_option).
         joins(joins_for_order_statement(order_option.join(',')))
   end
